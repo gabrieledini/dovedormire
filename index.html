@@ -2,246 +2,484 @@
 <html lang="it">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Dormire in famiglia — cerca strutture in una zona disegnata</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css">
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Deriva su Kethra</title>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root{
-  --sea:#1d6f7a; --sea-deep:#134f57; --sand:#f6efe3; --sun:#f2b544;
-  --ink:#1f2a2c; --muted:#5f6f72; --line:#dfd6c6; --white:#fff;
-  --sheet-h:44vh;
-}
-*{box-sizing:border-box}
-html,body{margin:0;height:100%;font-family:Nunito,system-ui,sans-serif;color:var(--ink);background:var(--sand)}
-#app{height:100%;display:flex;flex-direction:column}
-header{background:var(--sea);color:#fff;padding:10px 14px 8px;display:flex;flex-direction:column;gap:8px}
-#geo .act{flex:0 0 auto}
-#geo input:focus{outline:2px solid var(--sun)}
-.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.who{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.14);border-radius:999px;padding:4px 10px;font-size:14px}
-.who button{background:none;border:0;color:#fff;font:inherit;font-weight:800;font-size:18px;width:26px;height:26px;border-radius:50%;cursor:pointer}
-.who button:hover{background:rgba(255,255,255,.2)}
-.who b{min-width:14px;text-align:center}
-#map{flex:1;min-height:200px}
-.leaflet-draw-toolbar a{background-color:#fff}
-#sheet{background:var(--white);border-top:1px solid var(--line);height:auto;flex:0 0 auto;display:flex;flex-direction:column;box-shadow:0 -6px 20px rgba(19,79,87,.12)}
-#sheet.open{height:var(--sheet-h)}
-#sheet:not(.open) #chips,#sheet:not(.open) #list{display:none}
-.sheet-head{padding:10px 14px 8px;cursor:pointer;display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--line)}
-.sheet-head .status{flex:1;font-size:14px;color:var(--muted);min-width:140px}
-.chips{display:flex;gap:6px;overflow-x:auto;padding:6px 14px;scrollbar-width:none}
-.chips::-webkit-scrollbar{display:none}
-.chip{border:1.5px solid var(--sea);color:var(--sea);background:#fff;border-radius:999px;padding:4px 11px;font:inherit;font-size:13px;font-weight:700;white-space:nowrap;cursor:pointer}
-.chip.on{background:var(--sea);color:#fff}
-.chip .n{opacity:.7;font-weight:500;margin-left:4px}
-#list{overflow-y:auto;flex:1;padding:6px 10px 12px;display:flex;flex-direction:column;gap:8px}
-.card{background:var(--sand);border-radius:12px;padding:10px 12px;cursor:pointer;border:2px solid transparent}
-.card.sel{border-color:var(--sun);background:#fff}
-.card h3{margin:0 0 2px;font-size:15px;font-weight:800}
-.card .meta{font-size:13px;color:var(--muted)}
-.card .tag{display:inline-block;background:var(--sea);color:#fff;border-radius:6px;padding:1px 7px;font-size:12px;font-weight:700;margin-right:6px;vertical-align:middle}
-.card .fam{background:var(--sun);color:var(--ink)}
-.card .links{margin-top:6px;display:flex;gap:10px;flex-wrap:wrap}
-.card .links a{color:var(--sea-deep);font-weight:700;font-size:13px;text-decoration:none;border-bottom:1.5px solid var(--sun)}
-.empty{padding:22px 14px;color:var(--muted);font-size:15px;line-height:1.5}
-.empty b{color:var(--ink)}
-.ext{display:flex;gap:6px;flex-wrap:wrap}
-.ext a{background:var(--sun);color:var(--ink);border-radius:8px;padding:5px 10px;font-weight:800;font-size:13px;text-decoration:none}
-.ext a.q{background:#fff;border:1.5px solid var(--line)}
-button.act{background:var(--sun);color:var(--ink);border:0;border-radius:8px;padding:6px 12px;font:inherit;font-weight:800;font-size:13px;cursor:pointer}
-button.act.ghost{background:#fff;border:1.5px solid var(--line)}
-.leaflet-popup-content{font-family:Nunito,system-ui,sans-serif;font-size:14px}
-@media (min-width:900px){
-  #app{flex-direction:row;flex-wrap:wrap}
-  header{width:100%}
-  #map{flex:1;height:calc(100% - 66px)}
-  #sheet,#sheet.open{width:420px;height:calc(100% - 66px);border-top:0;border-left:1px solid var(--line)}
-  #sheet:not(.open) #chips,#sheet:not(.open) #list{display:flex}
-  #toggle{display:none}
-}
+  :root{
+    --ink:#0c0a1a; --indigo:#1a1440; --violet:#5a3f8f; --ochre:#c58a3c;
+    --teal:#1f8a8a; --glow:#9be7ff; --ivory:#e9e2d0; --red:#d84a3a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:var(--ink);color:var(--ivory);font-family:"Chakra Petch",system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+  #app{max-width:960px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+  #stage{width:100%;aspect-ratio:16/9;background:#000;position:relative}
+  #stage canvas{display:block;width:100%!important;height:100%!important;image-rendering:auto}
+  #caption{min-height:4.6em;padding:12px 16px;font-size:clamp(14px,2.6vw,18px);line-height:1.35;border-top:2px solid var(--violet);border-bottom:1px solid #2a2150;color:var(--ivory)}
+  #caption em{color:var(--glow);font-style:normal}
+  #bar{display:flex;align-items:center;gap:8px;padding:10px 12px}
+  #inv{flex:1;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;min-height:44px}
+  #inv::-webkit-scrollbar{display:none}
+  #inv:empty::before{content:"Inventario vuoto";color:#5a4f80;font-size:14px;align-self:center}
+  .item{flex:0 0 auto;border:1px solid var(--violet);background:#1a1440;color:var(--ivory);padding:10px 14px;font:inherit;font-size:14px;border-radius:3px;cursor:pointer}
+  .item.sel{border-color:var(--glow);color:var(--glow);box-shadow:0 0 0 1px var(--glow) inset,0 0 12px rgba(155,231,255,.35)}
+  #eye{flex:0 0 44px;height:44px;border:1px solid var(--violet);background:transparent;color:var(--ochre);font-size:22px;border-radius:3px;cursor:pointer}
+  .ov{position:fixed;inset:0;background:rgba(12,10,26,.94);display:flex;align-items:center;justify-content:center;padding:24px;text-align:center}
+  .ov.hidden{display:none}
+  .ov .box{max-width:520px}
+  h1{font-weight:600;font-size:clamp(34px,8vw,64px);letter-spacing:.02em;line-height:1;color:var(--ochre)}
+  h1 small{display:block;font-size:.34em;letter-spacing:.3em;color:var(--glow);margin-bottom:10px;font-weight:400}
+  .ov p{margin:18px 0;line-height:1.45;font-size:clamp(15px,2.8vw,18px);color:#cfc7e6}
+  .ov button.big{border:2px solid var(--ochre);background:var(--ochre);color:var(--ink);font:inherit;font-weight:600;font-size:18px;padding:12px 32px;border-radius:3px;cursor:pointer}
+  .ov button.ghost{border:1px solid var(--violet);background:transparent;color:var(--ivory);font:inherit;font-size:16px;padding:10px 20px;border-radius:3px;cursor:pointer;margin-top:8px}
+  .dials{display:flex;gap:18px;justify-content:center;margin:20px 0}
+  .dial{display:flex;flex-direction:column;align-items:center;gap:6px}
+  .dial button{width:56px;height:40px;border:1px solid var(--violet);background:#1a1440;color:var(--glow);font:inherit;font-size:20px;cursor:pointer;border-radius:3px}
+  .dial .n{width:56px;height:64px;display:grid;place-items:center;font-size:40px;font-weight:600;color:var(--glow);background:#07060f;border:1px solid var(--teal);border-radius:3px;text-shadow:0 0 10px rgba(155,231,255,.6)}
+  .dial .lab{font-size:22px;line-height:1}
+  .dials.shake{animation:sh .35s}
+  @keyframes sh{20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+  @media (prefers-reduced-motion:reduce){.dials.shake{animation:none}}
 </style>
 </head>
 <body>
 <div id="app">
-<header>
-  <form id="geo" class="row" style="gap:6px;flex-wrap:nowrap">
-    <input id="place" type="search" placeholder="Cerca località (es. Sasso Rosso, Castiglione di Garfagnana)" autocomplete="off" style="flex:1;border:0;border-radius:999px;padding:7px 12px;font:inherit;font-size:14px;min-width:0">
-    <button class="act" type="submit">Vai</button>
-  </form>
-  <div class="row">
-    <div class="who">Adulti <button data-k="adults" data-d="-1">−</button><b id="adults">2</b><button data-k="adults" data-d="1">+</button></div>
-    <div class="who">Bambini <button data-k="children" data-d="-1">−</button><b id="children">2</b><button data-k="children" data-d="1">+</button></div>
-    <div class="who">Notti <button data-k="nights" data-d="-1">−</button><b id="nights">3</b><button data-k="nights" data-d="1">+</button></div>
-    <input id="date" type="date" style="border:0;border-radius:999px;padding:5px 10px;font:inherit;font-size:13px">
+  <div id="stage"></div>
+  <div id="caption"><span id="capText"></span></div>
+  <div id="bar">
+    <div id="inv"></div>
+    <button id="eye" title="Evidenzia i punti interattivi" aria-label="Evidenzia i punti interattivi">◎</button>
   </div>
-</header>
-<div id="map"></div>
-<div id="sheet">
-  <div class="sheet-head">
-    <div class="status" id="status">Usa il pentagono o il rettangolo in alto a sinistra sulla mappa per tracciare la zona.</div>
-    <button class="act ghost" id="clear" hidden>Cancella zona</button>
-    <button class="act" id="rerun" hidden>Ricerca</button>
-    <button class="act ghost" id="toggle" hidden>Lista</button>
-  </div>
-  <div class="chips" id="chips"></div>
-  <div id="list"><div class="empty">Traccia un'area e trovo le strutture presenti in OpenStreetMap: hotel, B&amp;B, appartamenti, agriturismi, campeggi, rifugi. Poi apri la stessa zona su Booking o Airbnb con i tuoi ospiti già impostati.</div></div>
-</div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+<div id="title" class="ov">
+  <div class="box">
+    <h1><small>escape room</small>Deriva su Kethra</h1>
+    <p>Un atterraggio di emergenza. Un pianeta che non compare su nessuna carta. Tre lune, una cripta, un velivolo che non è tuo. Trova il modo di lasciarlo.</p>
+    <p style="font-size:14px;color:#8f86b3">Tocca i punti della scena per esaminarli. Seleziona un oggetto nell'inventario, poi tocca un punto della scena o un altro oggetto per usarlo. Il tasto ◎ evidenzia i punti interattivi.</p>
+    <button id="start" class="big">Inizia</button>
+  </div>
+</div>
+
+<div id="dial" class="ov hidden">
+  <div class="box">
+    <p>Il pannello mostra tre simboli e chiede tre cifre:<br><em style="color:var(--glow)">i satelliti nel cielo · le colonne della cripta · i segni sul murale</em></p>
+    <div class="dials" id="dials">
+      <div class="dial"><button data-d="0" data-v="1">+</button><div class="n" id="d0">0</div><button data-d="0" data-v="-1">−</button><div class="lab">☾</div></div>
+      <div class="dial"><button data-d="1" data-v="1">+</button><div class="n" id="d1">0</div><button data-d="1" data-v="-1">−</button><div class="lab">▯</div></div>
+      <div class="dial"><button data-d="2" data-v="1">+</button><div class="n" id="d2">0</div><button data-d="2" data-v="-1">−</button><div class="lab">◈</div></div>
+    </div>
+    <button id="dialOk" class="big">Conferma</button><br>
+    <button id="dialClose" class="ghost">Allontanati</button>
+  </div>
+</div>
+
+<div id="end" class="ov hidden">
+  <div class="box">
+    <h1><small>fine</small>In volo</h1>
+    <p id="endText"></p>
+    <button id="again" class="big">Ricomincia</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"
+  onerror="var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/phaser/3.60.0/phaser.min.js';document.head.appendChild(s);"></script>
 <script>
-// ---------- stato ----------
-const S = {adults:2, children:2, nights:3, shape:null, results:[], filter:'tutti', sel:null};
-const TYPES = {
-  hotel:'Hotel', guest_house:'B&B / Affittacamere', apartment:'Appartamento', hostel:'Ostello',
-  camp_site:'Campeggio', chalet:'Chalet', motel:'Motel', alpine_hut:'Rifugio', caravan_site:'Area camper',
-  farm:'Agriturismo', resort:'Resort'
+// ---------- costanti ----------
+const W=640, H=360, GY=300;
+const C={sky:0x1a1440, sky2:0x2c2160, rock:0x3d2c6e, rock2:0x5a3f8f, rock3:0x2a1d4f,
+  sand:0xc58a3c, sand2:0x9c6a2c, water:0x1f8a8a, glow:0x9be7ff, red:0xd84a3a,
+  metal:0x7f8aa3, metal2:0x4d5568, black:0x0c0a1a, ivory:0xe9e2d0};
+
+const ITEMS={
+  cavo:{n:'Cavo di alimentazione', d:'Un cavo spesso, strappato dal relitto. I connettori sembrano universali.'},
+  torcia:{n:'Torcia spenta', d:'La cella è morta. Al posto della batteria c\'è un alloggiamento vuoto, esagonale.'},
+  cristallo:{n:'Cristallo opaco', d:'Un cristallo esagonale, freddo e senza luce.'},
+  cristallo_c:{n:'Cristallo carico', d:'Pulsa di luce azzurra. Scalda la mano.'},
+  lanterna:{n:'Lanterna a cristallo', d:'La torcia con il cristallo al posto della batteria. Luce fredda, ma forte.'},
+  disco:{n:'Disco inciso', d:'Un disco di metallo scuro con incisioni a spirale. Sembra una chiave di lettura.'}
 };
-const FAMILY = new Set(['apartment','camp_site','chalet','farm','resort','guest_house']);
+const MURAL=['tri','cir','dia','squ'];   // ordine corretto: dal più grande al più piccolo
+const PANEL=['cir','squ','tri','dia'];   // ordine dei tasti sul pannello
+const CODE=[3,5,4];
 
-// data di default: prossimo sabato
-(function(){ const d=new Date(); d.setDate(d.getDate()+((6-d.getDay()+7)%7||7)); document.getElementById('date').value=d.toISOString().slice(0,10); })();
+const S={room:'canyon', inv:[], sel:null,
+  f:{wreck:false, cryTaken:false, gate:false, seq:[], niche:false, discTaken:false, power:false, code:false, disc:false}};
 
-// ---------- mappa ----------
-const map = L.map('map',{zoomControl:true}).setView([43.87,10.25],10);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);
-if(navigator.geolocation) navigator.geolocation.getCurrentPosition(p=>{ if(!S.shape) map.setView([p.coords.latitude,p.coords.longitude],11); },()=>{});
-
-const drawn = new L.FeatureGroup().addTo(map);
-const markers = L.layerGroup().addTo(map);
-L.drawLocal.draw.toolbar.buttons.polygon='Disegna zona (poligono)';
-L.drawLocal.draw.toolbar.buttons.rectangle='Disegna zona (rettangolo)';
-L.drawLocal.draw.handlers.polygon.tooltip={start:'Tocca per iniziare',cont:'Tocca per continuare',end:'Tocca il primo punto per chiudere'};
-L.drawLocal.draw.handlers.rectangle.tooltip={start:'Trascina per disegnare'};
-L.drawLocal.draw.handlers.simpleshape.tooltip={end:'Rilascia per finire'};
-const drawStyle={color:'#134f57',weight:3,fillColor:'#f2b544',fillOpacity:.15};
-map.addControl(new L.Control.Draw({
-  position:'topleft',
-  draw:{polygon:{allowIntersection:false,shapeOptions:drawStyle},rectangle:{shapeOptions:drawStyle},polyline:false,circle:false,circlemarker:false,marker:false},
-  edit:false
-}));
-map.on(L.Draw.Event.CREATED,e=>{ drawn.clearLayers(); drawn.addLayer(e.layer); S.shape=e.layer; search(); });
-
-// ---------- controlli ospiti ----------
-document.querySelectorAll('.who button').forEach(b=>b.onclick=()=>{
-  const k=b.dataset.k, min=k==='children'?0:1;
-  S[k]=Math.max(min,S[k]+Number(b.dataset.d)); document.getElementById(k).textContent=S[k]; render();
-});
-document.getElementById('date').onchange=render;
-document.getElementById('geo').onsubmit=async e=>{
-  e.preventDefault();
-  const q=document.getElementById('place').value.trim(); if(!q) return;
-  setStatus(`Cerco "${q}"…`);
-  try{
-    const r=await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=it&accept-language=it&q=${encodeURIComponent(q)}`,{headers:{'Accept':'application/json'}});
-    const j=await r.json();
-    if(!j.length){ setStatus(`Nessuna località trovata per "${q}".`); return; }
-    const b=j[0].boundingbox.map(Number);
-    map.fitBounds([[b[0],b[2]],[b[1],b[3]]],{maxZoom:14});
-    setStatus(j[0].display_name.split(',').slice(0,3).join(',')+' — ora traccia la zona.');
-    document.getElementById('place').blur();
-  }catch(err){ setStatus('Ricerca località fallita: '+err.message); }
+// ---------- audio ----------
+let AC=null;
+function beep(f,d=0.08,type='square',v=0.05){
+  if(!AC) return;
+  const o=AC.createOscillator(), g=AC.createGain();
+  o.type=type; o.frequency.value=f; g.gain.value=v;
+  g.gain.exponentialRampToValueAtTime(0.0001, AC.currentTime+d);
+  o.connect(g).connect(AC.destination); o.start(); o.stop(AC.currentTime+d);
+}
+const SND={
+  tap:()=>beep(420,0.04,'triangle'),
+  pick:()=>{beep(660,0.07,'triangle');setTimeout(()=>beep(990,0.09,'triangle'),70);},
+  ok:()=>{[523,659,784].forEach((f,i)=>setTimeout(()=>beep(f,0.12,'triangle',0.06),i*90));},
+  err:()=>beep(110,0.25,'sawtooth',0.06),
+  door:()=>{beep(80,0.5,'sawtooth',0.08);setTimeout(()=>beep(160,0.4,'triangle',0.05),200);}
 };
-document.getElementById('clear').onclick=()=>{ drawn.clearLayers(); markers.clearLayers(); S.shape=null; S.results=[]; setStatus('Traccia una nuova zona.'); document.getElementById('toggle').hidden=true; setOpen(false); render(); };
-document.getElementById('rerun').onclick=search;
-const sheet=document.getElementById('sheet');
-function setOpen(o){ sheet.classList.toggle('open',o); document.getElementById('toggle').textContent=o?'Mappa':'Lista'; setTimeout(()=>map.invalidateSize(),50); }
-document.getElementById('toggle').onclick=e=>{ e.stopPropagation(); setOpen(!sheet.classList.contains('open')); };
-document.querySelector('.sheet-head').onclick=e=>{ if(e.target.tagName!=='BUTTON') setOpen(!sheet.classList.contains('open')); };
 
-function setStatus(t){ document.getElementById('status').textContent=t; }
-
-// ---------- ricerca Overpass ----------
-function polyString(layer){
-  const ll=layer.getLatLngs()[0];
-  return ll.map(p=>p.lat.toFixed(5)+' '+p.lng.toFixed(5)).join(' ');
-}
-async function search(){
-  if(!S.shape) return;
-  const poly=polyString(S.shape);
-  const q=`[out:json][timeout:40];(nwr["tourism"~"^(hotel|guest_house|apartment|hostel|camp_site|chalet|motel|alpine_hut|caravan_site|resort)$"](poly:"${poly}");nwr["agritourism"](poly:"${poly}"););out center tags;`;
-  setStatus('Cerco le strutture nella zona…');
-  document.getElementById('rerun').hidden=true; document.getElementById('clear').hidden=false;
-  const endpoints=['https://overpass-api.de/api/interpreter','https://overpass.private.coffee/api/interpreter','https://maps.mail.ru/osm/tools/overpass/api/interpreter'];
-  let data=null, errs=[];
-  for(const ep of endpoints){
-    try{
-      const r=await fetch(ep,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'data='+encodeURIComponent(q)});
-      if(!r.ok){ errs.push(`${new URL(ep).host}: HTTP ${r.status}`); continue; }
-      const j=await r.json();
-      if(j.remark&&!j.elements?.length){ errs.push(`${new URL(ep).host}: ${j.remark}`); continue; }
-      data=j; break;
-    }catch(e){ errs.push(`${new URL(ep).host}: ${e.message}`); }
-  }
-  if(!data){ setStatus('Ricerca fallita — '+errs.join(' | ')); document.getElementById('rerun').hidden=false; return; }
-  const seen=new Set();
-  S.results=data.elements.filter(e=>e.tags&&!seen.has(e.type+e.id)&&seen.add(e.type+e.id)).map(e=>{
-    const t=e.tags, lat=e.lat??e.center?.lat, lon=e.lon??e.center?.lon;
-    let type=t.tourism||'other';
-    if(t.agritourism==='yes'||t.guest_house==='farm'||/agritur/i.test(t.name||'')) type='farm';
-    return {id:e.type+e.id, lat, lon, type, name:t.name||TYPES[type]||'Struttura senza nome',
-      stars:t.stars, phone:t.phone||t['contact:phone'], site:t.website||t['contact:website'],
-      addr:[t['addr:street'],t['addr:housenumber']].filter(Boolean).join(' ')+(t['addr:city']?(t['addr:street']?', ':'')+t['addr:city']:''),
-      rooms:t.rooms, beds:t.beds, pool:t.swimming_pool==='yes', kitchen:t.kitchen==='yes'||type==='apartment', pets:t.dog==='yes'||t.pets==='yes'};
-  }).filter(r=>r.lat&&r.lon);
-  S.filter='tutti'; S.sel=null;
-  setStatus(S.results.length?`${S.results.length} strutture nella zona`:'Nessuna struttura mappata in questa zona.');
-  document.getElementById('rerun').hidden=false;
-  document.getElementById('toggle').hidden=!S.results.length;
-  setOpen(false);
-  render();
-}
-
-// ---------- link esterni ----------
-function bbox(){ const b=S.shape.getBounds(); return {n:b.getNorth(),s:b.getSouth(),e:b.getEast(),w:b.getWest(),c:b.getCenter()}; }
-function dates(){ const d=new Date(document.getElementById('date').value); const o=new Date(d); o.setDate(d.getDate()+S.nights); return {ci:d.toISOString().slice(0,10),co:o.toISOString().slice(0,10)}; }
-function airbnbUrl(){ const b=bbox(),d=dates(); const ch=S.children?`&children=${S.children}`:''; return `https://www.airbnb.it/s/homes?refinement_paths[]=/homes&search_by_map=true&ne_lat=${b.n}&ne_lng=${b.e}&sw_lat=${b.s}&sw_lng=${b.w}&adults=${S.adults}${ch}&checkin=${d.ci}&checkout=${d.co}`; }
-function bookingUrl(name){ const b=bbox(),d=dates(); const rad=Math.max(2,Math.round(distKm(b.n,b.w,b.s,b.e)/2)); const ages=Array(S.children).fill('&age=6').join(''); const ss=name?`&ss=${encodeURIComponent(name)}`:''; return `https://www.booking.com/searchresults.it.html?latitude=${b.c.lat}&longitude=${b.c.lng}&radius=${rad}${ss}&checkin=${d.ci}&checkout=${d.co}&group_adults=${S.adults}&group_children=${S.children}${ages}&no_rooms=1&nflt=fc%3D2`; }
-function mapsUrl(r){ return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.name)}&query_place_id=&center=${r.lat},${r.lon}`; }
-function distKm(a,b,c,d){ const R=6371,x=(c-a)*Math.PI/180,y=(d-b)*Math.PI/180; const h=Math.sin(x/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(y/2)**2; return 2*R*Math.asin(Math.sqrt(h)); }
-
-// ---------- render ----------
-function render(){
-  const list=document.getElementById('list'), chips=document.getElementById('chips');
-  markers.clearLayers();
-  if(!S.shape){ list.innerHTML='<div class="empty">Traccia un\'area e trovo le strutture presenti in OpenStreetMap: hotel, B&amp;B, appartamenti, agriturismi, campeggi, rifugi. Poi apri la stessa zona su Booking o Airbnb con i tuoi ospiti già impostati.</div>'; return; }
-  const ext=`<div class="ext" style="padding:8px 4px 2px"><a href="${airbnbUrl()}" target="_blank" rel="noopener">Apri zona su Airbnb</a><a href="${bookingUrl()}" target="_blank" rel="noopener">Apri zona su Booking</a></div>`;
-  if(!S.results.length){ chips.innerHTML=''; list.innerHTML=`<div class="empty"><b>Nessuna struttura mappata qui.</b> Allarga la zona o prova direttamente sui portali:${ext}</div>`; return; }
-
-  // chips per tipo
-  const counts={}; S.results.forEach(r=>counts[r.type]=(counts[r.type]||0)+1);
-  const fam=S.results.filter(r=>FAMILY.has(r.type)).length;
-  chips.innerHTML=[['tutti','Tutte',S.results.length],['famiglia','Adatte a famiglie',fam],...Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([k,n])=>[k,TYPES[k]||k,n])]
-    .map(([k,l,n])=>`<button class="chip ${S.filter===k?'on':''}" data-f="${k}">${l}<span class="n">${n}</span></button>`).join('');
-  chips.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{ S.filter=c.dataset.f; render(); });
-
-  const rows=S.results.filter(r=>S.filter==='tutti'||(S.filter==='famiglia'?FAMILY.has(r.type):r.type===S.filter))
-    .sort((a,b)=>(FAMILY.has(b.type)-FAMILY.has(a.type))||a.name.localeCompare(b.name));
-  list.innerHTML=ext+rows.map(r=>{
-    const extra=[r.stars?`${r.stars}★`:'',r.rooms?`${r.rooms} camere`:'',r.beds?`${r.beds} letti`:'',r.pool?'piscina':'',r.kitchen?'cucina':'',r.pets?'animali ok':''].filter(Boolean).join(' · ');
-    return `<div class="card ${S.sel===r.id?'sel':''}" data-id="${r.id}">
-      <h3>${esc(r.name)}</h3>
-      <div class="meta"><span class="tag ${FAMILY.has(r.type)?'fam':''}">${TYPES[r.type]||r.type}</span>${esc(r.addr)}${extra?` <br>${extra}`:''}</div>
-      <div class="links">
-        <a href="${bookingUrl(r.name)}" target="_blank" rel="noopener">Booking</a>
-        <a href="${mapsUrl(r)}" target="_blank" rel="noopener">Maps</a>
-        ${r.site?`<a href="${esc(r.site)}" target="_blank" rel="noopener">Sito</a>`:''}
-        ${r.phone?`<a href="tel:${esc(r.phone)}">Chiama</a>`:''}
-      </div></div>`;
-  }).join('');
-  list.querySelectorAll('.card').forEach(c=>c.onclick=e=>{ if(e.target.tagName==='A') return; S.sel=c.dataset.id; const r=S.results.find(x=>x.id===S.sel); if(window.innerWidth<900) setOpen(false); map.panTo([r.lat,r.lon]); render(); });
-
-  rows.forEach(r=>{
-    const m=L.circleMarker([r.lat,r.lon],{radius:S.sel===r.id?10:7,color:'#134f57',weight:2,fillColor:FAMILY.has(r.type)?'#f2b544':'#fff',fillOpacity:1}).addTo(markers);
-    m.bindPopup(`<b>${esc(r.name)}</b><br>${TYPES[r.type]||r.type}${r.addr?'<br>'+esc(r.addr):''}<br><a href="${bookingUrl(r.name)}" target="_blank">Booking</a> · <a href="${mapsUrl(r)}" target="_blank">Maps</a>${r.site?` · <a href="${esc(r.site)}" target="_blank">Sito</a>`:''}`);
-    m.on('click',()=>{ S.sel=r.id; render(); if(sheet.classList.contains('open')) document.querySelector(`.card[data-id="${r.id}"]`)?.scrollIntoView({block:'center',behavior:'smooth'}); });
-    if(S.sel===r.id) m.openPopup();
+// ---------- UI ----------
+const capText=document.getElementById('capText');
+function say(t){ capText.innerHTML=t; }
+function renderInv(){
+  const inv=document.getElementById('inv'); inv.innerHTML='';
+  S.inv.forEach(id=>{
+    const b=document.createElement('button'); b.className='item'+(S.sel===id?' sel':''); b.textContent=ITEMS[id].n;
+    b.onclick=()=>tapItem(id); inv.appendChild(b);
   });
 }
-function esc(s){ return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function give(id){ if(!S.inv.includes(id)) S.inv.push(id); SND.pick(); renderInv(); }
+function take(id){ S.inv=S.inv.filter(i=>i!==id); if(S.sel===id) S.sel=null; renderInv(); }
+function swap(a,b){ S.inv=S.inv.map(i=>i===a?b:i); if(S.sel===a) S.sel=null; renderInv(); }
+function tapItem(id){
+  SND.tap();
+  if(S.sel && S.sel!==id){ combine(S.sel,id); return; }
+  S.sel = S.sel===id ? null : id;
+  if(S.sel) say(`<em>${ITEMS[id].n}</em> — ${ITEMS[id].d}`); else say('Rimetti via l\'oggetto.');
+  renderInv();
+}
+function combine(a,b){
+  const set=new Set([a,b]);
+  if(set.has('cristallo_c') && set.has('torcia')){
+    take('cristallo_c'); swap('torcia','lanterna'); SND.ok();
+    say('Il cristallo entra nell\'alloggiamento della torcia. La lampada si accende di una luce azzurra e ferma: una <em>lanterna a cristallo</em>.');
+    return;
+  }
+  if(set.has('cristallo') && set.has('torcia')){ SND.err(); say('Il cristallo entra nella torcia, ma è spento. Non succede nulla. Lo rimetti in tasca.'); S.sel=null; renderInv(); return; }
+  SND.err(); say('Questi due non si combinano.'); S.sel=null; renderInv();
+}
+
+// ---------- disegno: utilità ----------
+const STARS=[]; let sd=7;
+const rnd=()=>{ sd=(sd*9301+49297)%233280; return sd/233280; };
+for(let i=0;i<90;i++) STARS.push({x:rnd()*W, y:rnd()*210, r:rnd()*1.3+0.4, p:rnd()*6});
+const P=(x,y)=>({x,y});
+function hex(x,y,r){ const a=[]; for(let i=0;i<6;i++){const t=Math.PI/6+i*Math.PI/3; a.push(P(x+r*Math.cos(t),y+r*Math.sin(t)));} return a; }
+function glyph(g,type,x,y,r){
+  if(type==='tri') g.fillTriangle(x,y-r,x-r,y+r*0.8,x+r,y+r*0.8);
+  else if(type==='cir') g.fillCircle(x,y,r);
+  else if(type==='dia') g.fillPoints([P(x,y-r),P(x+r,y),P(x,y+r),P(x-r,y)],true);
+  else g.fillRect(x-r,y-r,r*2,r*2);
+}
+function skyNight(g){
+  g.fillStyle(C.sky); g.fillRect(0,0,W,H);
+  g.fillStyle(C.sky2); g.fillPoints([P(0,130),P(W,90),P(W,240),P(0,240)],true);
+  g.fillStyle(C.ivory,0.85); STARS.forEach(s=>g.fillCircle(s.x,s.y,s.r));
+  // tre satelliti
+  g.fillStyle(0xd6cfe6); g.fillCircle(470,70,34);
+  g.fillStyle(0xb9b0d1); g.fillCircle(455,60,10); g.fillCircle(485,82,6);
+  g.fillStyle(0xa79fc4); g.fillCircle(120,55,12); g.fillCircle(560,38,7);
+}
+function drawPlayer(g,x,y,t,walk,f){
+  g.clear();
+  const s=(a,b)=>P(x+a*f,y+b);
+  const sw=walk?Math.sin(t*12)*7:0, bob=walk?Math.abs(Math.sin(t*12))*2:0;
+  g.fillStyle(0x1e1738,0.45); g.fillEllipse(x,y+2,30,8);
+  g.fillStyle(0x2b2440); // gambe
+  g.fillPoints([s(-6,-30-bob),s(2,-30-bob),s(-2+sw,0),s(-9+sw,0)],true);
+  g.fillPoints([s(2,-30-bob),s(9,-30-bob),s(9-sw,0),s(2-sw,0)],true);
+  g.fillStyle(0x3a3257); g.fillPoints([s(-17,-58-bob),s(-9,-60-bob),s(-9,-34-bob),s(-15,-34-bob)],true); // zaino
+  g.fillStyle(0xc9743a); g.fillPoints([s(-10,-60-bob),s(10,-60-bob),s(9,-28-bob),s(-9,-28-bob)],true); // tuta
+  g.fillStyle(0x8f4f27); g.fillPoints([s(-9,-46-bob),s(9,-46-bob),s(9,-42-bob),s(-9,-42-bob)],true); // cintura
+  g.fillStyle(0xc9743a); g.fillPoints([s(10,-58-bob),s(15,-56-bob),s(12-sw*0.6,-30-bob),s(8-sw*0.6,-32-bob)],true); // braccio
+  g.fillStyle(0xe6b892); g.fillCircle(x,y-70-bob,8); // testa
+  g.fillStyle(0x2b2440); g.fillPoints([s(-9,-72-bob),s(-6,-79-bob),s(3,-80-bob),s(9,-74-bob),s(8,-70-bob),s(-8,-68-bob)],true); // capelli
+}
+
+// ---------- stanze ----------
+const ROOMS={};
+
+ROOMS.canyon={
+  intro:'Il canyon è silenzioso. Il relitto fuma ancora. Sopra di te, tre satelliti: nessuno è quello di casa.',
+  draw(g){
+    skyNight(g);
+    g.fillStyle(C.rock3); g.fillPoints([P(0,235),P(60,170),P(140,175),P(190,205),P(260,190),P(330,215),P(400,180),P(470,190),P(540,160),P(640,205),P(640,245),P(0,245)],true);
+    g.fillStyle(C.sand); g.fillRect(0,242,W,H-242);
+    g.fillStyle(C.sand2); g.fillPoints([P(0,292),P(W,272),P(W,H),P(0,H)],true);
+    // laghetto
+    g.fillStyle(0x145f66); g.fillEllipse(210,300,150,34);
+    g.fillStyle(C.water); g.fillEllipse(205,297,120,24);
+    // parete sinistra
+    g.fillStyle(C.rock); g.fillPoints([P(0,0),P(90,0),P(70,90),P(110,170),P(80,260),P(100,312),P(0,322)],true);
+    g.fillStyle(C.rock2); g.fillPoints([P(0,0),P(40,0),P(30,120),P(50,220),P(20,300),P(0,312)],true);
+    if(!S.f.cryTaken){ g.fillStyle(0xbfd8f0); g.fillPoints(hex(96,266,9),true); g.fillStyle(0xe9f6ff); g.fillPoints(hex(96,266,4),true); }
+    // parete destra + portale
+    g.fillStyle(C.rock); g.fillPoints([P(W,0),P(520,0),P(540,80),P(500,160),P(522,250),P(490,322),P(W,332)],true);
+    g.fillStyle(C.rock2); g.fillPoints([P(W,0),P(600,0),P(610,150),P(590,260),P(620,320),P(W,332)],true);
+    g.fillStyle(S.f.gate?C.black:0x1c1438); g.fillPoints([P(538,302),P(538,190),P(565,163),P(592,190),P(592,302)],true);
+    if(!S.f.gate){
+      g.lineStyle(3,0x2a1d4f); for(let i=0;i<4;i++) g.lineBetween(538,212+i*22,592,212+i*22);
+      g.fillStyle(0x0c0a1a); g.fillPoints(hex(565,236,9),true);
+      g.lineStyle(2,C.glow,0.45); g.strokePoints(hex(565,236,9),true);
+    } else { g.fillStyle(C.glow,0.7); g.fillPoints(hex(565,236,9),true); }
+    // relitto
+    const x=380,y=292;
+    g.fillStyle(0x1e1738,0.5); g.fillEllipse(x+10,y+6,150,16);
+    g.fillStyle(C.metal2); g.fillPoints([P(x-60,y),P(x-40,y-50),P(x+20,y-70),P(x+60,y-40),P(x+50,y)],true);
+    g.fillStyle(C.metal); g.fillPoints([P(x-40,y-50),P(x+20,y-70),P(x+55,y-42),P(x+10,y-30)],true);
+    g.fillStyle(0x0c0a1a); g.fillPoints([P(x-20,y-45),P(x+5,y-52),P(x+10,y-25),P(x-15,y-20)],true);
+    g.fillStyle(C.metal2); g.fillTriangle(x-95,y+2,x-72,y-14,x-62,y+2); g.fillTriangle(x+82,y+2,x+96,y-10,x+112,y+2);
+    g.fillStyle(0x5f6a80); g.fillPoints([P(x-58,y-10),P(x-30,y-22),P(x-28,y-8),P(x-52,y-2)],true);
+  },
+  fx(g,t){
+    g.fillStyle(C.glow,0.14+0.08*Math.sin(t*2)); g.fillEllipse(205,297,130,26);
+    g.fillStyle(C.glow,0.25+0.1*Math.sin(t*2+1)); g.fillEllipse(190,295,40,8);
+    if(Math.sin(t*3)>0){ g.fillStyle(C.red,0.9); g.fillCircle(430,246,4); g.fillStyle(C.red,0.25); g.fillCircle(430,246,10); }
+    if(!S.f.cryTaken){ g.fillStyle(0xffffff,0.2+0.2*Math.sin(t*4)); g.fillPoints(hex(96,266,5),true); }
+    if(S.f.gate){ g.fillStyle(C.glow,0.08+0.05*Math.sin(t*3)); g.fillPoints([P(538,302),P(538,190),P(565,163),P(592,190),P(592,302)],true); }
+  },
+  hot:[
+    {x:100,y:20,w:400,h:110,sx:300,on(){ SND.tap(); say('Tre satelliti in cielo: uno grande e sfregiato, due piccoli. Nessuno è quello di casa.'); }},
+    {x:300,y:215,w:180,h:80,sx:290,on(){
+      if(!S.f.wreck){ S.f.wreck=true; give('cavo'); give('torcia');
+        say('Il relitto è irrecuperabile. Dal pannello squarciato recuperi un <em>cavo di alimentazione</em> e una <em>torcia spenta</em>.'); }
+      else { SND.tap(); say('Quel che restava di utile l\'hai già preso. Il faro rosso lampeggia per nessuno.'); }
+    }},
+    {x:82,y:252,w:28,h:28,sx:118,if:()=>!S.f.cryTaken,on(){
+      S.f.cryTaken=true; give('cristallo'); scene.loadRoom();
+      say('Stacchi dalla roccia un <em>cristallo esagonale</em>. È opaco e freddo.');
+    }},
+    {x:135,y:280,w:150,h:40,sx:295,on(sel){
+      if(sel==='cristallo'){ swap('cristallo','cristallo_c'); SND.ok(); say('Immergi il cristallo. L\'acqua luminescente lo accende: ora <em>pulsa di azzurro</em>.'); }
+      else if(sel==='cristallo_c'){ SND.tap(); say('Il cristallo è già carico. L\'acqua non gli fa più nulla.'); }
+      else { SND.tap(); say('Un laghetto che emette luce propria. Qualcosa nell\'acqua reagisce ai minerali.'); }
+    }},
+    {x:536,y:160,w:58,h:142,sx:512,on(sel){
+      if(S.f.gate){ scene.goto('cripta',600); return; }
+      if(sel==='cristallo_c'){ S.f.gate=true; S.sel=null; renderInv(); SND.door(); scene.loadRoom();
+        say('Avvicini il cristallo all\'incavo: le lastre di pietra si ritraggono nella roccia. Il cristallo resta con te.'); }
+      else if(sel==='cristallo'){ SND.err(); say('Il cristallo opaco non reagisce all\'incavo. Ci vorrebbe luce.'); }
+      else { SND.tap(); say('Una porta sigillata nella roccia. Al centro un incavo <em>esagonale</em>, spento.'); }
+    }}
+  ]
+};
+
+ROOMS.cripta={
+  intro:'Una cripta scavata nella roccia. Cinque colonne, un murale, un pannello. Dall\'altra parte, un cunicolo buio.',
+  draw(g){
+    g.fillStyle(0x120d26); g.fillRect(0,0,W,H);
+    g.fillStyle(0x1f1740); g.fillRect(0,40,W,240);
+    g.fillStyle(0x2a2150); g.fillRect(0,280,W,H-280);
+    g.fillStyle(0x352a63); g.fillPoints([P(80,280),P(560,280),P(W,H),P(0,H)],true);
+    // passaggi
+    g.fillStyle(0x07060f); g.fillPoints([P(0,120),P(42,135),P(42,280),P(0,280)],true);
+    g.fillStyle(0x3a2d70); g.fillPoints([P(600,120),P(W,110),P(W,280),P(600,280)],true);
+    g.fillStyle(C.sand,0.35); g.fillPoints([P(612,140),P(W,132),P(W,280),P(612,280)],true);
+    // colonne
+    [60,150,240,400,490].forEach(x=>{
+      g.fillStyle(C.rock2); g.fillRect(x-14,60,28,220);
+      g.fillStyle(C.rock); g.fillRect(x-14,60,8,220);
+      g.fillStyle(0x6b52a8); g.fillRect(x-18,56,36,8); g.fillRect(x-18,272,36,8);
+    });
+    // murale
+    g.fillStyle(0x17112f); g.fillRect(262,98,116,106);
+    g.lineStyle(2,0x6b52a8); g.strokeRect(262,98,116,106);
+    g.fillStyle(C.glow,0.85);
+    glyph(g,'tri',292,132,22); glyph(g,'cir',350,128,14); glyph(g,'dia',300,178,9); glyph(g,'squ',350,178,6);
+    // nicchia
+    g.fillStyle(S.f.niche?0x07060f:0x2f2560); g.fillRect(300,214,40,46);
+    g.lineStyle(2,0x6b52a8); g.strokeRect(300,214,40,46);
+    if(S.f.niche && !S.f.discTaken){ g.fillStyle(0x3b3f4a); g.fillCircle(320,238,12); g.lineStyle(1,C.glow,0.7); g.strokeCircle(320,238,8); g.strokeCircle(320,238,4); }
+    // pannello
+    g.fillStyle(C.metal2); g.fillRect(545,148,40,104);
+    g.fillStyle(C.metal); g.fillRect(545,148,40,6);
+    PANEL.forEach((k,i)=>{ g.fillStyle(0x0c0a1a); g.fillCircle(565,168+i*24,9); g.fillStyle(0x6f7a93); glyph(g,k,565,168+i*24,5); });
+  },
+  fx(g,t){
+    [60,150,240,400,490].forEach((x,i)=>{ g.fillStyle(C.glow,0.25+0.15*Math.sin(t*2+i)); g.fillRect(x-2,80,4,180); });
+    S.f.seq.forEach(k=>{ const i=PANEL.indexOf(k); g.fillStyle(C.glow,0.9); glyph(g,k,565,168+i*24,5); g.fillStyle(C.glow,0.2); g.fillCircle(565,168+i*24,12); });
+    if(S.f.niche && !S.f.discTaken){ g.fillStyle(C.glow,0.15+0.1*Math.sin(t*4)); g.fillCircle(320,238,18); }
+    if(S.f.niche){ g.fillStyle(C.glow,0.5); PANEL.forEach((k,i)=>glyph(g,k,565,168+i*24,5)); }
+  },
+  hot:[
+    {x:0,y:120,w:45,h:160,sx:52,on(){
+      if(S.inv.includes('lanterna')){ scene.goto('piattaforma',560); }
+      else { SND.err(); say('Un cunicolo completamente buio. Senza una luce non ci entri.'); }
+    }},
+    {x:600,y:120,w:40,h:160,sx:588,on(){ scene.goto('canyon',500); }},
+    {x:262,y:98,w:116,h:106,sx:320,on(){ SND.tap(); say('Quattro segni incisi, di grandezze diverse: un <em>triangolo</em> grande, un <em>cerchio</em>, un <em>rombo</em> piccolo, un <em>quadrato</em> minuscolo. Sembrano messi in ordine.'); }},
+    {x:298,y:212,w:44,h:50,sx:320,on(){
+      if(S.f.niche && !S.f.discTaken){ S.f.discTaken=true; give('disco'); scene.loadRoom(); say('Nella nicchia c\'è un <em>disco inciso</em>. Lo prendi.'); }
+      else if(S.f.niche){ SND.tap(); say('La nicchia è vuota.'); }
+      else { SND.tap(); say('Una lastra di pietra sigillata sotto il murale. Non si muove.'); }
+    }},
+    ...PANEL.map((k,i)=>({x:548,y:157+i*24,w:34,h:22,sx:522,on(){
+      if(S.f.niche){ SND.tap(); say('Il pannello è già sbloccato.'); return; }
+      S.f.seq.push(k); beep(300+i*80,0.08,'triangle');
+      const ok=S.f.seq.every((v,j)=>MURAL[j]===v);
+      if(!ok){ S.f.seq=[]; setTimeout(SND.err,120); say('I segni si spengono. Sequenza sbagliata.'); return; }
+      if(S.f.seq.length===4){ S.f.niche=true; SND.door(); scene.loadRoom(); say('Il pannello vibra. Sotto il murale una lastra scivola via.'); }
+      else say(`Il segno si accende. ${S.f.seq.length} di 4.`);
+    }}))
+  ]
+};
+
+ROOMS.piattaforma={
+  intro:'Una piattaforma sul bordo del canyon. Sopra, un velivolo che non è tuo. Accanto, un pannello e un pilone di energia.',
+  draw(g){
+    skyNight(g);
+    g.fillStyle(C.rock3); g.fillPoints([P(0,240),P(80,190),P(160,200),P(240,175),P(330,205),P(420,185),P(520,200),P(640,170),P(640,260),P(0,260)],true);
+    g.fillStyle(0x0d0a1e); g.fillRect(0,258,W,H-258); // baratro
+    g.fillStyle(C.sand); g.fillPoints([P(0,262),P(140,262),P(120,H),P(0,H)],true);
+    g.fillStyle(C.sand2); g.fillPoints([P(0,292),P(130,290),P(120,H),P(0,H)],true);
+    // passaggio
+    g.fillStyle(0x07060f); g.fillPoints([P(0,150),P(40,165),P(40,292),P(0,300)],true);
+    // piattaforma
+    g.fillStyle(C.metal2); g.fillEllipse(360,306,380,54);
+    g.fillStyle(C.metal); g.fillEllipse(360,300,360,46);
+    g.fillStyle(0x5f6a80); g.fillEllipse(360,300,300,34);
+    // velivolo
+    const vx=440,vy=256;
+    g.fillStyle(0x1e1738,0.5); g.fillEllipse(vx,vy+42,170,14);
+    g.fillStyle(C.metal2); g.fillPoints([P(vx-90,vy+30),P(vx-60,vy-8),P(vx+10,vy-30),P(vx+70,vy-20),P(vx+95,vy+10),P(vx+80,vy+34)],true);
+    g.fillStyle(C.metal); g.fillPoints([P(vx-60,vy-8),P(vx+10,vy-30),P(vx+70,vy-20),P(vx+30,vy-4),P(vx-30,vy+4)],true);
+    g.fillStyle(0x0c0a1a); g.fillPoints([P(vx-10,vy-22),P(vx+40,vy-16),P(vx+30,vy-4),P(vx-20,vy-2)],true);
+    g.fillStyle(C.metal2); g.fillRect(vx-20,vy+34,14,8); g.fillRect(vx+50,vy+34,14,8);
+    // pannello
+    g.fillStyle(C.metal2); g.fillPoints([P(214,300),P(214,248),P(244,236),P(244,300)],true);
+    g.fillStyle(C.metal); g.fillPoints([P(214,248),P(244,236),P(258,240),P(228,252)],true);
+    g.fillStyle(S.f.power?0x0e3a3f:0x0c0a1a); g.fillPoints([P(218,262),P(240,254),P(240,282),P(218,290)],true);
+    if(S.f.code){ g.fillStyle(0x07060f); g.fillCircle(236,246,4); }
+    if(S.f.disc){ g.fillStyle(0x3b3f4a); g.fillCircle(236,246,5); }
+    // pilone
+    g.fillStyle(C.rock2); g.fillPoints([P(585,300),P(590,130),P(612,130),P(618,300)],true);
+    g.fillStyle(C.rock); g.fillPoints([P(585,300),P(590,130),P(598,130),P(596,300)],true);
+    g.fillStyle(0x6b52a8); g.fillPoints([P(586,124),P(616,124),P(620,136),P(582,136)],true);
+    g.fillStyle(0x0c0a1a); g.fillRect(592,272,16,12);
+    if(S.f.power){ g.lineStyle(3,0x2b2440); g.beginPath(); g.moveTo(600,282); g.lineTo(560,296); g.lineTo(420,304); g.lineTo(300,298); g.lineTo(244,290); g.strokePath(); }
+  },
+  fx(g,t){
+    g.fillStyle(C.glow,0.5+0.3*Math.sin(t*3)); g.fillCircle(601,118,6);
+    g.fillStyle(C.glow,0.12); g.fillCircle(601,118,14);
+    if(S.f.power){ g.fillStyle(C.glow,0.35+0.15*Math.sin(t*6)); g.fillPoints([P(218,262),P(240,254),P(240,282),P(218,290)],true); }
+    if(S.f.power && S.f.code){ g.fillStyle(C.glow,0.25+0.12*Math.sin(t*4)); g.fillEllipse(440,296,170,10); }
+    if(S.f.disc){ g.fillStyle(C.glow,0.6+0.3*Math.sin(t*8)); g.fillPoints([P(430,234),P(480,228),P(470,240),P(420,242)],true); }
+  },
+  hot:[
+    {x:0,y:150,w:42,h:150,sx:52,on(){ scene.goto('cripta',60); }},
+    {x:576,y:118,w:50,h:184,sx:548,on(sel){
+      if(!S.f.power && sel==='cavo'){ S.f.power=true; take('cavo'); SND.ok(); scene.loadRoom(); say('Colleghi il cavo alla base del pilone e lo tiri fino al pannello. <em>Il pannello si accende.</em>'); }
+      else if(S.f.power){ SND.tap(); say('Il pilone ronza. Il cavo tiene.'); }
+      else { SND.tap(); say('Un pilone di energia. Alla base c\'è un attacco compatibile con qualcosa che hai visto sul relitto.'); }
+    }},
+    {x:208,y:232,w:52,h:70,sx:186,on(sel){
+      if(!S.f.power){
+        if(sel==='cavo'){ S.f.power=true; take('cavo'); SND.ok(); scene.loadRoom(); say('Colleghi il cavo al pannello e lo tiri fino al pilone. <em>Il pannello si accende.</em>'); }
+        else { SND.err(); say('Il pannello è spento. Serve alimentazione.'); }
+        return;
+      }
+      if(!S.f.code){ openDial(); return; }
+      if(!S.f.disc){
+        if(sel==='disco'){ S.f.disc=true; take('disco'); SND.ok(); scene.loadRoom(); say('Il disco entra nella fessura e comincia a girare. <em>Il velivolo si illumina.</em>'); }
+        else { SND.tap(); say('Codice accettato. Nel pannello si è aperta una <em>fessura circolare</em>: aspetta qualcosa.'); }
+        return;
+      }
+      SND.tap(); say('Tutto pronto. Il velivolo aspetta.');
+    }},
+    {x:350,y:222,w:190,h:78,sx:336,on(){
+      if(S.f.power && S.f.code && S.f.disc){ ending(); return; }
+      if(!S.f.power){ SND.tap(); say('Il velivolo è inerte. Nessuna luce.'); }
+      else { SND.tap(); say('Il portello resta chiuso. Il pannello controlla tutto.'); }
+    }}
+  ]
+};
+
+// ---------- scena Phaser ----------
+let scene=null;
+class Game extends Phaser.Scene{
+  create(){
+    scene=this;
+    this.bg=this.add.graphics(); this.fx=this.add.graphics(); this.pl=this.add.graphics();
+    this.zones=[]; this.pos={x:120}; this.face=1; this.walking=false; this.t=0; this.hint=0;
+    this.loadRoom(); say(ROOMS[S.room].intro);
+    this.cameras.main.fadeIn(700,12,10,26);
+  }
+  loadRoom(){
+    this.zones.forEach(z=>z.destroy()); this.zones=[];
+    this.bg.clear(); ROOMS[S.room].draw(this.bg);
+    ROOMS[S.room].hot.filter(h=>!h.if||h.if()).forEach(h=>{
+      const z=this.add.zone(h.x,h.y,h.w,h.h).setOrigin(0).setInteractive({useHandCursor:true});
+      z.h=h; z.on('pointerdown',()=>this.tap(h)); this.zones.push(z);
+    });
+  }
+  tap(h){
+    if(this.walking||this.busy) return;
+    const tx=Phaser.Math.Clamp(h.sx??(h.x+h.w/2),30,W-30), sel=S.sel;
+    this.walk(tx,()=>h.on.call(this,sel));
+  }
+  walk(tx,cb){
+    const d=Math.abs(tx-this.pos.x);
+    if(d<6){ cb(); return; }
+    this.face=tx>this.pos.x?1:-1; this.walking=true;
+    this.tweens.add({targets:this.pos,x:tx,duration:d*6,ease:'Linear',onComplete:()=>{this.walking=false;cb();}});
+  }
+  goto(room,x){
+    this.busy=true; SND.tap();
+    this.cameras.main.fadeOut(350,12,10,26);
+    this.time.delayedCall(370,()=>{
+      S.room=room; this.pos.x=x; this.face=x>W/2?-1:1; this.loadRoom(); say(ROOMS[room].intro);
+      this.cameras.main.fadeIn(350,12,10,26); this.busy=false;
+    });
+  }
+  update(_,dt){
+    this.t+=dt/1000; this.fx.clear();
+    ROOMS[S.room].fx&&ROOMS[S.room].fx(this.fx,this.t);
+    if(this.hint>0){ this.hint-=dt; const a=0.5+0.4*Math.sin(this.t*8);
+      this.zones.forEach(z=>{const h=z.h; this.fx.fillStyle(C.ochre,a); this.fx.fillCircle(h.x+h.w/2,h.y+h.h/2,6); this.fx.lineStyle(2,C.ochre,a*0.6); this.fx.strokeCircle(h.x+h.w/2,h.y+h.h/2,11);}); }
+    drawPlayer(this.pl,this.pos.x,GY,this.t,this.walking,this.face);
+  }
+}
+
+// ---------- pannello codice ----------
+const dialVals=[0,0,0];
+function openDial(){
+  document.getElementById('dial').classList.remove('hidden');
+  dialVals.forEach((v,i)=>document.getElementById('d'+i).textContent=v);
+}
+document.querySelectorAll('#dials button').forEach(b=>b.onclick=()=>{
+  const d=+b.dataset.d, v=+b.dataset.v; dialVals[d]=(dialVals[d]+v+10)%10;
+  document.getElementById('d'+d).textContent=dialVals[d]; beep(500+dialVals[d]*40,0.05,'triangle');
+});
+document.getElementById('dialClose').onclick=()=>{ document.getElementById('dial').classList.add('hidden'); say('Ti allontani dal pannello.'); };
+document.getElementById('dialOk').onclick=()=>{
+  if(dialVals.every((v,i)=>v===CODE[i])){
+    S.f.code=true; SND.ok(); document.getElementById('dial').classList.add('hidden'); scene.loadRoom();
+    say('Il pannello accetta il codice. Si apre una <em>fessura circolare</em>, larga quanto un palmo.');
+  } else {
+    SND.err(); const el=document.getElementById('dials'); el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake');
+  }
+};
+
+// ---------- finale ----------
+function ending(){
+  SND.door(); setTimeout(SND.ok,500);
+  scene.cameras.main.fadeOut(1400,12,10,26);
+  setTimeout(()=>{
+    document.getElementById('endText').textContent='Il portello si apre. Ti siedi in un sedile costruito per qualcun altro. Il velivolo si stacca dalla piattaforma senza un suono e il canyon scivola via sotto le tre lune. Dove vada, non lo sai. Ma non è più Kethra.';
+    document.getElementById('end').classList.remove('hidden');
+  },1500);
+}
+document.getElementById('again').onclick=()=>location.reload();
+document.getElementById('eye').onclick=()=>{ if(scene){ scene.hint=1800; SND.tap(); } };
+
+// ---------- avvio ----------
+window.onerror=(m,src,l)=>{ say('<em>Errore</em>: '+m+' (riga '+l+')'); };
+document.getElementById('start').onclick=()=>{
+  if(typeof Phaser==='undefined'){ alert('Libreria Phaser non caricata: controlla la connessione e ricarica la pagina.'); return; }
+  try{ AC=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){}
+  document.getElementById('title').classList.add('hidden');
+  new Phaser.Game({
+    type:Phaser.AUTO, parent:'stage', width:W, height:H, backgroundColor:'#0c0a1a',
+    scale:{mode:Phaser.Scale.FIT, autoCenter:Phaser.Scale.CENTER_BOTH, expandParent:false},
+    scene:Game
+  });
+  renderInv();
+};
 </script>
 </body>
 </html>
